@@ -23,7 +23,10 @@ class ScreenRestart extends StatelessWidget {
             Text(message),
             Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Text(wordCorrect ?? ''),
+              child: Text(
+                wordCorrect ?? '',
+                style: const TextStyle(fontSize: 18.0),
+              ),
             ),
           ],
         ),
@@ -45,15 +48,15 @@ class ScreenRestart extends StatelessWidget {
                       onPressed: () => Restart.restartApp(),
                       child: const Text(
                         'Reiniciar a partida',
-                        style: TextStyle(fontSize: 18.0),
+                        style: TextStyle(fontSize: 16.0),
                       ),
                     ),
-                    const SizedBox(width: 10.0),
+                    const SizedBox(width: 17.0),
                     TextButton(
                       onPressed: () => FlutterExitApp.exitApp(),
                       child: const Text(
                         'Sair do app',
-                        style: TextStyle(fontSize: 18.0),
+                        style: TextStyle(fontSize: 17.0),
                       ),
                     ),
                   ],

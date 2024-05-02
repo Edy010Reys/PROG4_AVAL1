@@ -61,7 +61,21 @@ class _ScreenGameState extends State<ScreenGame> {
         });
       }
 
-      if (_pointsErrors == 4) {
+      if (_pointsHits == _wordChosen.split('').length) {
+        _result = 'PARABÉNS! VOCÊ GANHOU.';
+
+        Future.delayed(
+          const Duration(seconds: 2),
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScreenRestart(message: _result),
+              ),
+            );
+          },
+        );
+      } else if (_pointsErrors == 4) {
         setState(() {
           _tip = 'A DICA É: ${_wordsAndTips.wordsAndTips[_wordChosen]}';
         });
@@ -79,20 +93,6 @@ class _ScreenGameState extends State<ScreenGame> {
                   message: _result,
                   wordCorrect: answer,
                 ),
-              ),
-            );
-          },
-        );
-      } else if (_pointsHits == _wordChosen.split('').length) {
-        _result = 'PARABÉNS! VOCÊ GANHOU.';
-
-        Future.delayed(
-          const Duration(seconds: 2),
-          () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ScreenRestart(message: _result),
               ),
             );
           },
@@ -138,7 +138,7 @@ class _ScreenGameState extends State<ScreenGame> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 200.0,
+              width: 220.0,
               decoration: const BoxDecoration(color: Colors.white),
               child: Padding(
                 padding: const EdgeInsets.all(1.0),
@@ -216,7 +216,10 @@ class _ScreenGameState extends State<ScreenGame> {
               const Padding(
                 padding: EdgeInsets.all(4.0),
                 child: Center(
-                  child: Text('Equipe: Francisco Edson e Weslley Domille'),
+                  child: Text(
+                    'Aluno: Francisco Edson',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
                 ),
               ),
             ],

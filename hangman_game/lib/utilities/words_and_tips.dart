@@ -9,7 +9,7 @@ class WordsAndTips {
     'BRASIL': 'PAÍS',
     'CHILE': 'PAÍS',
     'ROCK': 'ESTILO MUSICAL',
-    'JUPITER': 'PLANETA',
+    'JÚPITER': 'PLANETA',
     'ACRE': 'ESTADO BRASILEIRO'
   };
 }
