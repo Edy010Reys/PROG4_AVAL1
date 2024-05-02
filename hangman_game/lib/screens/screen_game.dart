@@ -1,34 +1,24 @@
 import 'package:flutter/material.dart';
 
-import 'package:hangman_game/word_secret.dart';
+import '../utilities/word_secret.dart';
+
+import 'screen_restart.dart';
+
+import '../utilities/words_and_tips.dart';
 
 import 'dart:math';
 
 final List<String> alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-final List<String> _listWords = [
-  'FUTEBOL',
-  'VENTILADOR',
-  'PERA',
-  'POLEGAR',
-];
+final _wordsAndTips = WordsAndTips();
 
-final List<String> _listTips = [
-  'JOGO',
-  'OBJETO',
-  'FRUTA',
-  'DEDO',
-];
+final _rnd = Random().nextInt(_wordsAndTips.wordsAndTips.length);
 
-final _rnd = Random().nextInt(4);
-
-final String _wordChosen = _listWords[_rnd];
+final String _wordChosen = _wordsAndTips.wordsAndTips.keys.toList()[_rnd];
 
 List<String> _lettersErrors = [];
 
 List<String> _lettersHits = [];
-
-int _amountError = 0;
 
 int _pointsHits = 0;
 
@@ -38,9 +28,7 @@ String _tip = '';
 
 String _result = '';
 
-String _letterChosen = '';
-
-AssetImage _imageHangman = AssetImage('assets/images/$_amountError.png');
+AssetImage _imageHangman = AssetImage('assets/images/$_pointsErrors.png');
 
 class ScreenGame extends StatefulWidget {
   const ScreenGame({super.key});
@@ -56,37 +44,59 @@ class _ScreenGameState extends State<ScreenGame> {
   };
 
   Widget letterButton(index) {
-    final letterAlphabet = alphabet[index];
+    final String letterAlphabet = alphabet[index];
 
     void pressButton() {
-      _letterChosen = letterAlphabet;
-      if (letterAndWidget.keys.toList().contains(_letterChosen)) {
-        _lettersHits.add(_letterChosen);
+      if (_wordChosen.split('').contains(letterAlphabet)) {
+        _pointsHits++;
+        _lettersHits.add(letterAlphabet);
         setState(() {
-          letterAndWidget[_letterChosen] = WordSecret(letter: _letterChosen);
-          _pointsHits++;
+          letterAndWidget[letterAlphabet] = WordSecret(letter: letterAlphabet);
         });
       } else {
-        _amountError++;
+        _pointsErrors++;
         _lettersErrors.add(letterAlphabet);
         setState(() {
-          _imageHangman = AssetImage('assets/images/$_amountError.png');
-          _pointsErrors++;
+          _imageHangman = AssetImage('assets/images/$_pointsErrors.png');
         });
       }
 
       if (_pointsErrors == 4) {
         setState(() {
-          _tip = 'A DICA É: ${_listTips[_rnd]}';
+          _tip = 'A DICA É: ${_wordsAndTips.wordsAndTips[_wordChosen]}';
         });
       } else if (_pointsErrors == 6) {
-        setState(() {
-          _result = 'QUE PENA! VOCÊ PERDEU.';
-        });
+        _result = 'QUE PENA! VOCÊ PERDEU.';
+        String answer = 'A RESPOSTA CORRETA ERA: $_wordChosen';
+
+        Future.delayed(
+          const Duration(seconds: 2),
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScreenRestart(
+                  message: _result,
+                  wordCorrect: answer,
+                ),
+              ),
+            );
+          },
+        );
       } else if (_pointsHits == _wordChosen.split('').length) {
-        setState(() {
-          _result = 'PARABÉNNNS!!! VOCÊ GANHOU.';
-        });
+        _result = 'PARABÉNS! VOCÊ GANHOU.';
+
+        Future.delayed(
+          const Duration(seconds: 2),
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScreenRestart(message: _result),
+              ),
+            );
+          },
+        );
       }
     }
 
@@ -113,33 +123,46 @@ class _ScreenGameState extends State<ScreenGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: const Text('Hangman Game'),
+        title: const Center(
+          child: Text(
+            'Hangman Game',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        backgroundColor: Colors.white,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(_tip),
-            const SizedBox(height: 30.0),
+            Container(
+              width: 200.0,
+              decoration: const BoxDecoration(color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: Center(
+                  child: Text(_tip),
+                ),
+              ),
+            ),
+            const SizedBox(height: 25.0),
             Image(
-              width: 120.0,
-              height: 120.0,
+              width: 160.0,
+              height: 160.0,
               image: _imageHangman,
             ),
-            const SizedBox(height: 30.0),
+            const SizedBox(height: 25.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: letterAndWidget.values.toList(),
             ),
-            const SizedBox(height: 30.0),
-            Text(_result),
           ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: 250.0,
+        height: 240.0,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -189,6 +212,12 @@ class _ScreenGameState extends State<ScreenGame> {
                   letterButton(24),
                   letterButton(25),
                 ],
+              ),
+              const Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Center(
+                  child: Text('Equipe: Francisco Edson e Weslley Domille'),
+                ),
               ),
             ],
           ),

@@ -15,14 +15,19 @@ class WordSecret extends StatefulWidget {
 class _WordSecretState extends State<WordSecret> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 30.0,
-      height: 30.0,
-      decoration: BoxDecoration(
-        border: Border.all(),
-      ),
-      child: Center(
-        child: Text(widget.letter ?? ''),
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: SizedBox(
+          width: 50.0,
+          height: 50.0,
+          child: Center(
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Text(widget.letter ?? ''),
+            ),
+          ),
+        ),
       ),
     );
   }
