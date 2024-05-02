@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../utilities/word_secret.dart';
 
-import 'screen_restart.dart';
+import './screen_restart.dart';
 
 import '../utilities/words_and_tips.dart';
 
@@ -80,7 +80,7 @@ class _ScreenGameState extends State<ScreenGame> {
           _tip = 'A DICA É: ${_wordsAndTips.wordsAndTips[_wordChosen]}';
         });
       } else if (_pointsErrors == 6) {
-        _result = 'QUE PENA! VOCÊ PERDEU.';
+        String result = 'QUE PENA! VOCÊ PERDEU.';
         String answer = 'A RESPOSTA CORRETA ERA: $_wordChosen';
 
         Future.delayed(
@@ -90,7 +90,7 @@ class _ScreenGameState extends State<ScreenGame> {
               context,
               MaterialPageRoute(
                 builder: (context) => ScreenRestart(
-                  message: _result,
+                  message: result,
                   wordCorrect: answer,
                 ),
               ),
@@ -138,12 +138,15 @@ class _ScreenGameState extends State<ScreenGame> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 220.0,
+              width: 300.0,
               decoration: const BoxDecoration(color: Colors.white),
               child: Padding(
                 padding: const EdgeInsets.all(1.0),
                 child: Center(
-                  child: Text(_tip),
+                  child: Text(
+                    _tip,
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
                 ),
               ),
             ),
